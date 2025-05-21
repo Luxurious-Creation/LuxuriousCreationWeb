@@ -80,16 +80,16 @@ You can access Luxurious Creation directly from your browser:
 
 ## 📸 Screenshots & Demo Video
 
-* [Demo Video](https://drive.google.com/file/d/1I36ZEh3EZvrzxtZUA095MnxTGIsDMuYU/view?usp=drive_link)
-* ![Home Page](media/homePage.png)
-* ![Explore Catgeory](media/exploreCategory.png)
-* ![Category Page](media/categoryPage.png)
-* ![Product Detail](media/productDetail.png)
-* ![Model View](media/modelView.png)
-* ![Add to Cart](media/addToCart.png)
-* ![Contact Form](media/contactForm.png)
-* ![Get Customize](media/getCustomize.jpg)
-* ![Feedback Form](media/feedbackForm.jpg)
+[Demo Video](https://drive.google.com/file/d/1I36ZEh3EZvrzxtZUA095MnxTGIsDMuYU/view?usp=drive_link)
+![Home Page](media/homePage.png)
+![Explore Catgeory](media/exploreCategory.png)
+![Category Page](media/categoryPage.png)
+![Product Detail](media/productDetail.png)
+![Model View](media/modelView.png)
+![Add to Cart](media/addToCart.png)
+![Contact Form](media/contactForm.png)
+![Get Customize](media/getCustomize.png)
+![Feedback Form](media/feedbackForm.png)
 
 ---
 
