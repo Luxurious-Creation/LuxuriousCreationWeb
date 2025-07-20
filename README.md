@@ -80,7 +80,8 @@ You can access Luxurious Creation directly from your browser:
 
 ## 📸 Screenshots & Demo Video
 
-[Demo Video](https://drive.google.com/file/d/1I36ZEh3EZvrzxtZUA095MnxTGIsDMuYU/view?usp=drive_link)
+https://github.com/user-attachments/assets/d90e1a28-45d7-4e98-9203-69623b8731e8
+
 ![Home Page](media/homePage.png)
 ![Explore Catgeory](media/exploreCategory.png)
 ![Category Page](media/categoryPage.png)
