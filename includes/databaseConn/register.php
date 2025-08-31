@@ -1,11 +1,6 @@
 <?php 
 ob_start(); 
-
 require 'config.php';
-if (!$con) {
-    echo '<script>alert("Database connection failed! Please try again later."); location.replace("../../authentication/index.html");</script>';
-    exit();
-}
 
 // Check if form was submitted via POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -33,35 +28,33 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // Check if username or email already exists
+$check_stmt = mysqli_prepare($con, "SELECT id FROM register_lc WHERE username = ? OR email = ?");
+mysqli_stmt_bind_param($check_stmt, "ss", $username, $email);
+mysqli_stmt_execute($check_stmt);
+$check_result = mysqli_stmt_get_result($check_stmt);
 
-
-$check_result = pg_query_params($con, "SELECT id FROM register_lc WHERE username = $1 OR email = $2", array($username, $email));
-if (!$check_result) {
-    echo '<script>alert("Server error! Please try again later."); location.replace(document.referrer);</script>';
-    exit();
-}
-if (pg_num_rows($check_result) > 0) {
+if (mysqli_num_rows($check_result) > 0) {
     echo '<script>alert("Username or email already exists!"); location.replace(document.referrer);</script>';
-    pg_free_result($check_result);
+    mysqli_stmt_close($check_stmt);
     exit();
 }
-pg_free_result($check_result);
-
-// Hash the password before saving
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+mysqli_stmt_close($check_stmt);
 
 // Use prepared statements to prevent SQL injection
+$stmt1 = mysqli_prepare($con, "INSERT INTO register_lc (name, username, email, contact, password) VALUES (?, ?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt1, "sssss", $name, $username, $email, $contact, $password);
 
+$stmt2 = mysqli_prepare($con, "INSERT INTO login_lc (username, password) VALUES (?, ?)");
+mysqli_stmt_bind_param($stmt2, "ss", $username, $password);
 
-$result1 = pg_query_params($con, "INSERT INTO register_lc (name, username, email, contact, password) VALUES ($1, $2, $3, $4, $5)", array($name, $username, $email, $contact, $hashed_password));
-$result2 = pg_query_params($con, "INSERT INTO login_lc (username, password) VALUES ($1, $2)", array($username, $hashed_password));
-if ($result1 && $result2) {
+// Execute both statements
+if (mysqli_stmt_execute($stmt1) && mysqli_stmt_execute($stmt2)) {
     echo '<script>alert("Registration Successful! Redirecting to Login page"); location.replace(document.referrer);</script>';
 } else {
-    $err = pg_last_error($con);
-    echo '<script>alert("Registration failed! '."$err".'"); location.replace(document.referrer);</script>';
+    echo '<script>alert("Registration failed! Please try again."); location.replace(document.referrer);</script>';
 }
-if ($result1) pg_free_result($result1);
-if ($result2) pg_free_result($result2);
-pg_close($con);
+
+mysqli_stmt_close($stmt1);
+mysqli_stmt_close($stmt2);
+mysqli_close($con);
 ?>
