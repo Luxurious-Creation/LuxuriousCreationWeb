@@ -28,7 +28,26 @@
 
 <body onload="changetag(), classReuse()">
   <!-- navigation -->
-  <nav id="navFile"></nav>
+  <div class="navdiv">
+    <div class="navbarL">
+      <a href="../user.html">
+        <img src="../assets/images/Logo.jpg" alt="Logo" />
+        <h1 class="brandName">Luxurious Creation</h1>
+      </a>
+    </div>
+    <div class="navbarR">
+      <input type="checkbox" name="" id="check" />
+      <label for="check">
+        <i class="fa-solid fa-bars icon" id="btn"></i>
+        <i class="fa-solid fa-xmark icon" id="cancel"></i>
+      </label>
+      <ul class="navList" id="navList">
+        <li id="homepage"><a href="../index.html">Home</a></li>
+        <li id="categorypage"><a href="../category.html">Category</a></li>
+        <button id="authenticatepage" class="active"><a href="index.html">Login/Register</a></button>
+      </ul>
+    </div>
+  </div>
 
   <!-- navigation -->
 
