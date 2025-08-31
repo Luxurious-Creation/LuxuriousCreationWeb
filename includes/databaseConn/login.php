@@ -1,6 +1,11 @@
 <?php 
 ob_start(); 
+
 require 'config.php';
+if (!$con) {
+    echo '<script>alert("Database connection failed! Please try again later."); location.replace("../../index.html");</script>';
+    exit();
+}
 
 // Check if form was submitted via POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -18,28 +23,27 @@ if (empty($username) || empty($password)) {
 }
 
 // Use prepared statements to prevent SQL injection
-$stmt = mysqli_prepare($con, "SELECT id, username FROM login_lc WHERE username = ? AND password = ?");
-mysqli_stmt_bind_param($stmt, "ss", $username, $password);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
 
-if (mysqli_num_rows($result) > 0) {
-    // Login successful
-    $user = mysqli_fetch_assoc($result);
-    
-    // Update last login time
-    $update_stmt = mysqli_prepare($con, "UPDATE login_lc SET last_login = NOW() WHERE username = ?");
-    mysqli_stmt_bind_param($update_stmt, "s", $username);
-    mysqli_stmt_execute($update_stmt);
-    mysqli_stmt_close($update_stmt);
-    
-    // Redirect to user page
-    echo '<script>window.location.href="../../welcome/user.html";</script>';
+
+$result = pg_query_params($con, "SELECT password FROM login_lc WHERE username = $1", array($username));
+if (!$result) {
+    echo '<script>alert("Server error! Please try again later."); location.replace(document.referrer);</script>';
+    exit();
+}
+$row = pg_fetch_assoc($result);
+if ($row) {
+    if (password_verify($password, $row['password'])) {
+        // Update last login time
+        $update_result = pg_query_params($con, "UPDATE login_lc SET last_login = NOW() WHERE username = $1", array($username));
+        if ($update_result) pg_free_result($update_result);
+        // Redirect to user page
+        echo '<script>window.location.href="../../welcome/user.html";</script>';
+    } else {
+        echo '<script>alert("Invalid Username or Password!"); location.replace(document.referrer);</script>';
+    }
 } else {
-    // Login failed
     echo '<script>alert("Invalid Username or Password!"); location.replace(document.referrer);</script>';
 }
-
-mysqli_stmt_close($stmt);
-mysqli_close($con);
+pg_free_result($result);
+pg_close($con);
 ?>

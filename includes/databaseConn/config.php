@@ -1,28 +1,13 @@
 <?php
-ob_start(); //Turns on output buffering 
-
-// Set timezone
-$timezone = date_default_timezone_set("Europe/London");
-
-// Database configuration
-$host = "localhost";
-$username = "root";
-$password = "";
-$database = "luxurious_creation";
-
-// Create connection
-$con = mysqli_connect($host, $username, $password, $database);
-
-// Check connection
-if(mysqli_connect_errno()) 
-{
-    die("Database connection failed: " . mysqli_connect_error());
+ob_start();
+// Use your Supabase credentials
+$host = "aws-1-us-east-1.pooler.supabase.com";
+$port = "6543";
+$dbname = "postgres";
+$user = "postgres.etwqavsycsuchuovnuui";
+$password = "d7xi4UUQlPizla1Z";
+$conn_string = "host=$host port=$port dbname=$dbname user=$user password=$password sslmode=require";
+$con = pg_connect($conn_string);
+if (!$con) {
+    die("Database connection failed: " . pg_last_error());
 }
-
-// Set charset to utf8mb4 for better character support
-mysqli_set_charset($con, "utf8mb4");
-
-// Enable error reporting in development (remove in production)
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-
-?>
